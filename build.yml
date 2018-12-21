@@ -7,8 +7,18 @@ steps:
       - -r
       - gs://artifacts.$PROJECT_ID.appspot.com/artifacts/$BRANCH_NAME/.m2
       - .
-  - name: 'ubuntu'
-    args: ['bash', './build.sh']
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - .
+      - -t
+      - gcr.io/$PROJECT_ID/glymur
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - run
+      - --volume=/workspace/build:/root/build
+      - --volume=/workspace/.m2:/root/.m2/repository
+      - gcr.io/$PROJECT_ID/glymur
   - name: gcr.io/cloud-builders/gsutil
     args:
       - -mq
