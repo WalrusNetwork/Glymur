@@ -13,12 +13,12 @@ steps:
       - .
       - -t
       - gcr.io/$PROJECT_ID/glymur
-  - name: gcr.io/cloud-builders/docker
-    args:
-      - run
-      - --volume=/workspace/:/root/
-      - --volume=/workspace/.m2:/root/.m2/repository
-      - gcr.io/$PROJECT_ID/glymur
+  # - name: gcr.io/cloud-builders/docker
+  #   args:
+  #     - run
+  #     - --volume=/workspace/:/root/
+  #     - --volume=/workspace/.m2:/root/.m2/repository
+  #     - gcr.io/$PROJECT_ID/glymur
   - name: gcr.io/cloud-builders/gsutil
     args:
       - -mq

@@ -16,5 +16,3 @@ RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
 
 ENV MAVEN_HOME /usr/share/maven
 ENV MAVEN_OPTS "-XX:+TieredCompilation -XX:TieredStopAtLevel=1 -Dmaven.repo.local=/workspace/.m2"
-
-RUN ls
