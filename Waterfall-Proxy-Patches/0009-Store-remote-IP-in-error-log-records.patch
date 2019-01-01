@@ -1,0 +1,33 @@
+From 4b65f42ad01b1e40997294098ba8fdc835259b83 Mon Sep 17 00:00:00 2001
+From: Austin Mayes <austin@avicus.net>
+Date: Mon, 31 Dec 2018 18:15:40 -0600
+Subject: [PATCH] Store remote IP in error log records
+
+
+diff --git a/proxy/src/main/java/net/md_5/bungee/netty/HandlerBoss.java b/proxy/src/main/java/net/md_5/bungee/netty/HandlerBoss.java
+index 7e7cf7be..2b0fb363 100644
+--- a/proxy/src/main/java/net/md_5/bungee/netty/HandlerBoss.java
++++ b/proxy/src/main/java/net/md_5/bungee/netty/HandlerBoss.java
+@@ -9,6 +9,7 @@ import io.netty.handler.timeout.ReadTimeoutException;
+ import java.io.IOException;
+ import java.net.InetSocketAddress;
+ import java.util.logging.Level;
++import java.util.logging.LogRecord;
+ import net.md_5.bungee.api.ProxyServer;
+ import net.md_5.bungee.connection.CancelSendSignal;
+ import net.md_5.bungee.connection.InitialHandler;
+@@ -149,7 +150,10 @@ public class HandlerBoss extends ChannelInboundHandlerAdapter
+                     } );
+                 } else
+                 {
+-                    ProxyServer.getInstance().getLogger().log( Level.SEVERE, handler + " - encountered exception", cause );
++                    final LogRecord record = new LogRecord(Level.SEVERE, handler + " - encountered exception" );
++                    record.setThrown( cause );
++                    record.setParameters( new Object[]{ ctx.channel().remoteAddress() } );
++                    ProxyServer.getInstance().getLogger().log( record );
+                 }
+             }
+ 
+-- 
+2.19.0
+

@@ -1,0 +1,22 @@
+From 97c172b1cc5054b003ff3c4931733e10d9a32e8e Mon Sep 17 00:00:00 2001
+From: Austin Mayes <austin@avicus.net>
+Date: Sun, 30 Dec 2018 21:55:14 -0600
+Subject: [PATCH] Log event exceptions at SEVERE level
+
+
+diff --git a/event/src/main/java/net/md_5/bungee/event/EventBus.java b/event/src/main/java/net/md_5/bungee/event/EventBus.java
+index 5b5d4201..080349d2 100644
+--- a/event/src/main/java/net/md_5/bungee/event/EventBus.java
++++ b/event/src/main/java/net/md_5/bungee/event/EventBus.java
+@@ -52,7 +52,7 @@ public class EventBus
+                     throw new Error( "Method rejected target/argument: " + event, ex );
+                 } catch ( InvocationTargetException ex )
+                 {
+-                    logger.log( Level.WARNING, MessageFormat.format( "Error dispatching event {0} to listener {1}", event, method.getListener() ), ex.getCause() );
++                    logger.log( Level.SEVERE, MessageFormat.format( "Error dispatching event {0} to listener {1}", event, method.getListener() ), ex.getCause() );
+                 }
+             }
+         }
+-- 
+2.19.0
+

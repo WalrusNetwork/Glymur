@@ -1,0 +1,121 @@
+From 75bcac0c413d9126efad4c730a694e5e6bc13e02 Mon Sep 17 00:00:00 2001
+From: Austin Mayes <austin@avicus.net>
+Date: Mon, 31 Dec 2018 23:35:48 -0600
+Subject: [PATCH] Add quiet connect plugin channel message
+
+
+diff --git a/api/src/main/java/net/md_5/bungee/api/ServerConnectRequest.java b/api/src/main/java/net/md_5/bungee/api/ServerConnectRequest.java
+index ad2ebdea..b47a54a6 100644
+--- a/api/src/main/java/net/md_5/bungee/api/ServerConnectRequest.java
++++ b/api/src/main/java/net/md_5/bungee/api/ServerConnectRequest.java
+@@ -65,6 +65,11 @@ public class ServerConnectRequest
+      * queue if the initial request fails.
+      */
+     private final boolean retry;
++    /**
++     * Should we hide the default Bungee "already connected" message when
++     * the player is sent to a server they are already on.
++     */
++    private final boolean quiet;
+ 
+     /**
+      * Class that sets default properties/adds methods to the lombok builder
+diff --git a/proxy/src/main/java/net/md_5/bungee/UserConnection.java b/proxy/src/main/java/net/md_5/bungee/UserConnection.java
+index 32830770..f019d24a 100644
+--- a/proxy/src/main/java/net/md_5/bungee/UserConnection.java
++++ b/proxy/src/main/java/net/md_5/bungee/UserConnection.java
+@@ -271,12 +271,18 @@ public final class UserConnection implements ProxiedPlayer
+     }
+ 
+     public void connect(ServerInfo info, final Callback<Boolean> callback, final boolean retry, ServerConnectEvent.Reason reason, final int timeout)
++    {
++        connect(info, callback, retry, reason, timeout, false);
++    }
++
++    public void connect(ServerInfo info, final Callback<Boolean> callback, final boolean retry, ServerConnectEvent.Reason reason, final int timeout, boolean quiet)
+     {
+         // Waterfall end
+         Preconditions.checkNotNull( info, "info" );
+ 
+         ServerConnectRequest.Builder builder = ServerConnectRequest.builder().retry( retry ).reason( reason ).target( info );
+         builder.connectTimeout(timeout); // Waterfall
++        builder.quiet(quiet);
+         if ( callback != null )
+         {
+             // Convert the Callback<Boolean> to be compatible with Callback<Result> from ServerConnectRequest.
+@@ -323,7 +329,9 @@ public final class UserConnection implements ProxiedPlayer
+                 callback.done( ServerConnectRequest.Result.ALREADY_CONNECTED, null );
+             }
+ 
+-            sendMessage( bungee.getTranslation( "already_connected" ) );
++            if (!request.isQuiet()) {
++                sendMessage( bungee.getTranslation( "already_connected" ) );
++            }
+             return;
+         }
+         if ( pendingConnects.contains( target ) )
+@@ -333,7 +341,9 @@ public final class UserConnection implements ProxiedPlayer
+                 callback.done( ServerConnectRequest.Result.ALREADY_CONNECTING, null );
+             }
+ 
+-            sendMessage( bungee.getTranslation( "already_connecting" ) );
++            if (!request.isQuiet()) {
++                sendMessage( bungee.getTranslation( "already_connecting" ) );
++            }
+             return;
+         }
+ 
+@@ -369,12 +379,14 @@ public final class UserConnection implements ProxiedPlayer
+                     ServerInfo def = updateAndGetNextServer( target );
+                     if ( request.isRetry() && def != null && ( getServer() == null || def != getServer().getInfo() ) )
+                     {
+-                        sendMessage( bungee.getTranslation( "fallback_lobby" ) );
++                        if (!request.isQuiet()) {
++                            sendMessage( bungee.getTranslation( "fallback_lobby" ) );
++                        }
+                         connect( def, null, true, ServerConnectEvent.Reason.LOBBY_FALLBACK, request.getConnectTimeout() ); // Waterfall
+                     } else if ( dimensionChange )
+                     {
+                         disconnect( bungee.getTranslation( "fallback_kick", future.cause().getClass().getName() ) );
+-                    } else
++                    } else if (!request.isQuiet())
+                     {
+                         sendMessage( bungee.getTranslation( "fallback_kick", future.cause().getClass().getName() ) );
+                     }
+diff --git a/proxy/src/main/java/net/md_5/bungee/connection/DownstreamBridge.java b/proxy/src/main/java/net/md_5/bungee/connection/DownstreamBridge.java
+index 180e835d..97a12a70 100644
+--- a/proxy/src/main/java/net/md_5/bungee/connection/DownstreamBridge.java
++++ b/proxy/src/main/java/net/md_5/bungee/connection/DownstreamBridge.java
+@@ -1,6 +1,5 @@
+ package net.md_5.bungee.connection;
+ 
+-import com.google.common.base.Preconditions;
+ import com.google.common.io.ByteArrayDataOutput;
+ import com.google.common.io.ByteStreams;
+ import java.io.DataInput;
+@@ -11,6 +10,7 @@ import io.netty.buffer.Unpooled;
+ import lombok.RequiredArgsConstructor;
+ import net.md_5.bungee.ServerConnection;
+ import net.md_5.bungee.api.chat.TextComponent;
++import net.md_5.bungee.api.event.ServerConnectEvent.Reason;
+ import net.md_5.bungee.api.event.ServerDisconnectEvent;
+ import net.md_5.bungee.api.event.TabCompleteResponseEvent;
+ import net.md_5.bungee.UserConnection;
+@@ -360,6 +360,14 @@ public class DownstreamBridge extends PacketHandler
+                     con.connect( server, ServerConnectEvent.Reason.PLUGIN_MESSAGE );
+                 }
+             }
++            if ( subChannel.equals( "ConnectQuiet" ) )
++            {
++                ServerInfo server = bungee.getServerInfo( in.readUTF() );
++                if ( server != null )
++                {
++                    con.connect(server, null, false, Reason.PLUGIN_MESSAGE, 5000, true);
++                }
++            }
+             if ( subChannel.equals( "ConnectOther" ) )
+             {
+                 ProxiedPlayer player = bungee.getPlayer( in.readUTF() );
+-- 
+2.19.0
+

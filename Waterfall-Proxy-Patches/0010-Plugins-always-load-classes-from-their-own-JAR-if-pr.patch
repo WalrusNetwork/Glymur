@@ -1,0 +1,194 @@
+From 86c40f2187addf7bb999d5754c29eb781a597459 Mon Sep 17 00:00:00 2001
+From: Austin Mayes <austin@avicus.net>
+Date: Mon, 31 Dec 2018 22:29:50 -0600
+Subject: [PATCH] Plugins always load classes from their own JAR if present
+
+
+diff --git a/api/src/main/java/net/md_5/bungee/api/plugin/PluginClassloader.java b/api/src/main/java/net/md_5/bungee/api/plugin/PluginClassloader.java
+index 85203fb8..74a7c30e 100644
+--- a/api/src/main/java/net/md_5/bungee/api/plugin/PluginClassloader.java
++++ b/api/src/main/java/net/md_5/bungee/api/plugin/PluginClassloader.java
+@@ -2,54 +2,58 @@ package net.md_5.bungee.api.plugin;
+ 
+ import java.net.URL;
+ import java.net.URLClassLoader;
++import java.util.List;
+ import java.util.Set;
+ import java.util.concurrent.CopyOnWriteArraySet;
+ 
+ public class PluginClassloader extends URLClassLoader
+ {
+ 
+-    private static final Set<PluginClassloader> allLoaders = new CopyOnWriteArraySet<>();
+-
+     static
+     {
+         ClassLoader.registerAsParallelCapable();
+     }
+ 
+-    public PluginClassloader(URL[] urls)
++    private final List<PluginClassloader> dependencies;
++
++    public PluginClassloader(List<PluginClassloader> dependencies, URL[] urls)
+     {
+         super( urls );
+-        allLoaders.add( this );
++        this.dependencies = dependencies;
+     }
+ 
+     @Override
+     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException
+     {
+-        return loadClass0( name, resolve, true );
++        synchronized(getClassLoadingLock(name)) {
++            try {
++                return loadLocalClass(name, resolve);
++            } catch(ClassNotFoundException e1) {
++                try {
++                    return loadDependencyClass(name, resolve);
++                } catch(ClassNotFoundException e2) {
++                    return super.loadClass(name, resolve);
++                }
++            }
++        }
+     }
+ 
+-    private Class<?> loadClass0(String name, boolean resolve, boolean checkOther) throws ClassNotFoundException
+-    {
+-        try
+-        {
+-            return super.loadClass( name, resolve );
+-        } catch ( ClassNotFoundException ex )
+-        {
+-        }
+-        if ( checkOther )
+-        {
+-            for ( PluginClassloader loader : allLoaders )
+-            {
+-                if ( loader != this )
+-                {
+-                    try
+-                    {
+-                        return loader.loadClass0( name, resolve, false );
+-                    } catch ( ClassNotFoundException ex )
+-                    {
+-                    }
+-                }
++    private Class<?> loadLocalClass(String name, boolean resolve) throws ClassNotFoundException {
++        Class<?> cls = findLoadedClass(name);
++        if(cls == null) cls = findClass(name);
++        if(resolve) resolveClass(cls);
++        return cls;
++    }
++
++    private Class<?> loadDependencyClass(String name, boolean resolve) throws ClassNotFoundException {
++        for (PluginClassloader loader : dependencies) {
++            try {
++                return loader.loadLocalClass(name, resolve);
++            }
++            catch (ClassNotFoundException e) {
++                // continue
+             }
+         }
+-        throw new ClassNotFoundException( name );
++        throw new ClassNotFoundException(name);
+     }
+ }
+diff --git a/api/src/main/java/net/md_5/bungee/api/plugin/PluginManager.java b/api/src/main/java/net/md_5/bungee/api/plugin/PluginManager.java
+index c9ac96d6..f2cefd57 100644
+--- a/api/src/main/java/net/md_5/bungee/api/plugin/PluginManager.java
++++ b/api/src/main/java/net/md_5/bungee/api/plugin/PluginManager.java
+@@ -8,13 +8,13 @@ import java.io.File;
+ import java.io.InputStream;
+ import java.lang.reflect.Method;
+ import java.net.URL;
+-import java.net.URLClassLoader;
++import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.Collection;
+ import java.util.HashMap;
+-import java.util.HashSet;
+ import java.util.Iterator;
+ import java.util.LinkedHashMap;
++import java.util.LinkedHashSet;
+ import java.util.List;
+ import java.util.Locale;
+ import java.util.Map;
+@@ -50,6 +50,7 @@ public class PluginManager
+     private final Map<String, Plugin> plugins = new LinkedHashMap<>();
+     private final Map<String, Command> commandMap = new HashMap<>();
+     private Map<String, PluginDescription> toLoad = new HashMap<>();
++    private final Map<String, PluginClassloader> classLoaders = new HashMap<>();
+     private final Multimap<Plugin, Command> commandsByPlugin = ArrayListMultimap.create();
+     private final Multimap<Plugin, Listener> listenersByPlugin = ArrayListMultimap.create();
+ 
+@@ -240,10 +241,11 @@ public class PluginManager
+     public void loadPlugins()
+     {
+         Map<PluginDescription, Boolean> pluginStatuses = new HashMap<>();
++        Map<PluginDescription, PluginClassloader> pluginLoaders = new HashMap<>();
+         for ( Map.Entry<String, PluginDescription> entry : toLoad.entrySet() )
+         {
+             PluginDescription plugin = entry.getValue();
+-            if ( !enablePlugin( pluginStatuses, new Stack<PluginDescription>(), plugin ) )
++            if ( !enablePlugin( pluginStatuses, pluginLoaders, new Stack<PluginDescription>(), plugin ) )
+             {
+                 ProxyServer.getInstance().getLogger().log( Level.WARNING, "Failed to enable {0}", entry.getKey() );
+             }
+@@ -270,7 +272,7 @@ public class PluginManager
+         }
+     }
+ 
+-    private boolean enablePlugin(Map<PluginDescription, Boolean> pluginStatuses, Stack<PluginDescription> dependStack, PluginDescription plugin)
++    private boolean enablePlugin(Map<PluginDescription, Boolean> pluginStatuses, Map<PluginDescription, PluginClassloader> pluginLoaders, Stack<PluginDescription> dependStack, PluginDescription plugin)
+     {
+         if ( pluginStatuses.containsKey( plugin ) )
+         {
+@@ -278,12 +280,13 @@ public class PluginManager
+         }
+ 
+         // combine all dependencies for 'for loop'
+-        Set<String> dependencies = new HashSet<>();
++        Set<String> dependencies = new LinkedHashSet<>();
+         dependencies.addAll( plugin.getDepends() );
+         dependencies.addAll( plugin.getSoftDepends() );
+ 
+         // success status
+         boolean status = true;
++        final List<PluginClassloader> dependLoaders = new ArrayList<>();
+ 
+         // try to load dependencies first
+         for ( String dependName : dependencies )
+@@ -306,11 +309,15 @@ public class PluginManager
+                 } else
+                 {
+                     dependStack.push( plugin );
+-                    dependStatus = this.enablePlugin( pluginStatuses, dependStack, depend );
++                    dependStatus = this.enablePlugin( pluginStatuses, pluginLoaders, dependStack, depend );
+                     dependStack.pop();
+                 }
+             }
+ 
++            if(Boolean.TRUE.equals(dependStatus)) {
++                dependLoaders.add(Preconditions.checkNotNull(pluginLoaders.get(depend)));
++            }
++
+             if ( dependStatus == Boolean.FALSE && plugin.getDepends().contains( dependName ) ) // only fail if this wasn't a soft dependency
+             {
+                 ProxyServer.getInstance().getLogger().log( Level.WARNING, "{0} (required by {1}) is unavailable", new Object[]
+@@ -331,10 +338,11 @@ public class PluginManager
+         {
+             try
+             {
+-                URLClassLoader loader = new PluginClassloader( new URL[]
++                PluginClassloader loader = new PluginClassloader(dependLoaders,  new URL[]
+                 {
+                     plugin.getFile().toURI().toURL()
+                 } );
++                pluginLoaders.put(plugin, loader);
+                 Class<?> main = loader.loadClass( plugin.getMain() );
+                 Plugin clazz = (Plugin) main.getDeclaredConstructor().newInstance();
+ 
+-- 
+2.19.0
+

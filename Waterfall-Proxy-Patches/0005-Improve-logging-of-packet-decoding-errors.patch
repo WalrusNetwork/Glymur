@@ -1,0 +1,23 @@
+From 325f648780aef8319a5b50bd18290368e99ca236 Mon Sep 17 00:00:00 2001
+From: Austin Mayes <austin@avicus.net>
+Date: Sun, 30 Dec 2018 21:56:41 -0600
+Subject: [PATCH] Improve logging of packet decoding errors
+
+
+diff --git a/protocol/src/main/java/net/md_5/bungee/protocol/BadPacketException.java b/protocol/src/main/java/net/md_5/bungee/protocol/BadPacketException.java
+index 6c0ef4df..d3ee377d 100644
+--- a/protocol/src/main/java/net/md_5/bungee/protocol/BadPacketException.java
++++ b/protocol/src/main/java/net/md_5/bungee/protocol/BadPacketException.java
+@@ -1,6 +1,8 @@
+ package net.md_5.bungee.protocol;
+ 
+-public class BadPacketException extends RuntimeException
++import io.netty.handler.codec.DecoderException;
++
++public class BadPacketException extends DecoderException
+ {
+ 
+     public BadPacketException(String message)
+-- 
+2.19.0
+
