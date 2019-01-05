@@ -12,7 +12,7 @@
     <url>https://github.com/StratusNetwork/Glymur</url>
 
     <modules>
-        <module>Glymur-Proxy</module>
+        <module>Glymur</module>
     </modules>
 
     <build>
