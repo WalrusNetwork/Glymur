@@ -19,6 +19,24 @@
         <defaultGoal>clean install</defaultGoal>
     </build>
 
+    <repositories>
+        <repository>
+            <id>stratus-public</id>
+            <url>https://repo.stratus.network/repository/maven-public/</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>stratus-public</id>
+            <url>https://repo.stratus.network/repository/maven-public/</url>
+        </snapshotRepository>
+        <repository>
+            <id>stratus-public</id>
+            <url>https://repo.stratus.network/repository/maven-public/</url>
+        </repository>
+    </distributionManagement>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
