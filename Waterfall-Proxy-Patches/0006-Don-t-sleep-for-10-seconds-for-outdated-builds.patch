@@ -1,16 +1,16 @@
-From 101bd0eaa19967032c0c7527bc27d1dd47ed49af Mon Sep 17 00:00:00 2001
+From f8e25e06912d8bdf29ab83b74417736530fa9754 Mon Sep 17 00:00:00 2001
 From: Austin Mayes <austin@avicus.net>
 Date: Sun, 30 Dec 2018 22:07:44 -0600
 Subject: [PATCH] Don't sleep for 10 seconds for outdated builds
 
 
-diff --git a/bootstrap/src/main/java/net/md_5/bungee/BungeeCordLauncher.java b/bootstrap/src/main/java/net/md_5/bungee/BungeeCordLauncher.java
-index 8175d35b..470733f7 100644
---- a/bootstrap/src/main/java/net/md_5/bungee/BungeeCordLauncher.java
-+++ b/bootstrap/src/main/java/net/md_5/bungee/BungeeCordLauncher.java
-@@ -45,8 +45,8 @@ public class BungeeCordLauncher
+diff --git a/proxy/src/main/java/net/md_5/bungee/BungeeCordLauncher.java b/proxy/src/main/java/net/md_5/bungee/BungeeCordLauncher.java
+index 3f5d32c9..2f3f9a56 100644
+--- a/proxy/src/main/java/net/md_5/bungee/BungeeCordLauncher.java
++++ b/proxy/src/main/java/net/md_5/bungee/BungeeCordLauncher.java
+@@ -51,8 +51,8 @@ public class BungeeCordLauncher
                  System.err.println( "*** Hey! This build is potentially outdated :( ***" );
-                 System.err.println( "*** Please check for a new build from https://ci.destroystokyo.com/job/Glymur/ ***" );
+                 System.err.println( "*** Please check for a new build from https://papermc.io/ci/job/Waterfall/ ***" );
                  System.err.println( "*** Should this build be outdated, you will get NO support for it. ***" );
 -                System.err.println( "*** Server will start in 10 seconds ***" );
 -                Thread.sleep( TimeUnit.SECONDS.toMillis( 10 ) );
@@ -20,5 +20,5 @@ index 8175d35b..470733f7 100644
          }
  
 -- 
-2.19.0
+2.20.1
 

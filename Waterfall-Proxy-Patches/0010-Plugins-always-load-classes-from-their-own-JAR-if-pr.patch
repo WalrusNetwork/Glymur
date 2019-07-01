@@ -1,4 +1,4 @@
-From 86c40f2187addf7bb999d5754c29eb781a597459 Mon Sep 17 00:00:00 2001
+From 55a1856d652bb6d000594f4803736a6b1848c052 Mon Sep 17 00:00:00 2001
 From: Austin Mayes <austin@avicus.net>
 Date: Mon, 31 Dec 2018 22:29:50 -0600
 Subject: [PATCH] Plugins always load classes from their own JAR if present
@@ -95,10 +95,10 @@ index 85203fb8..74a7c30e 100644
      }
  }
 diff --git a/api/src/main/java/net/md_5/bungee/api/plugin/PluginManager.java b/api/src/main/java/net/md_5/bungee/api/plugin/PluginManager.java
-index c9ac96d6..f2cefd57 100644
+index 884f78c8..677ae606 100644
 --- a/api/src/main/java/net/md_5/bungee/api/plugin/PluginManager.java
 +++ b/api/src/main/java/net/md_5/bungee/api/plugin/PluginManager.java
-@@ -8,13 +8,13 @@ import java.io.File;
+@@ -8,14 +8,14 @@ import java.io.File;
  import java.io.InputStream;
  import java.lang.reflect.Method;
  import java.net.URL;
@@ -106,6 +106,7 @@ index c9ac96d6..f2cefd57 100644
 +import java.util.ArrayList;
  import java.util.Arrays;
  import java.util.Collection;
+ import java.util.Collections;
  import java.util.HashMap;
 -import java.util.HashSet;
  import java.util.Iterator;
@@ -114,7 +115,7 @@ index c9ac96d6..f2cefd57 100644
  import java.util.List;
  import java.util.Locale;
  import java.util.Map;
-@@ -50,6 +50,7 @@ public class PluginManager
+@@ -51,6 +51,7 @@ public class PluginManager
      private final Map<String, Plugin> plugins = new LinkedHashMap<>();
      private final Map<String, Command> commandMap = new HashMap<>();
      private Map<String, PluginDescription> toLoad = new HashMap<>();
@@ -122,7 +123,7 @@ index c9ac96d6..f2cefd57 100644
      private final Multimap<Plugin, Command> commandsByPlugin = ArrayListMultimap.create();
      private final Multimap<Plugin, Listener> listenersByPlugin = ArrayListMultimap.create();
  
-@@ -240,10 +241,11 @@ public class PluginManager
+@@ -262,10 +263,11 @@ public class PluginManager
      public void loadPlugins()
      {
          Map<PluginDescription, Boolean> pluginStatuses = new HashMap<>();
@@ -135,7 +136,7 @@ index c9ac96d6..f2cefd57 100644
              {
                  ProxyServer.getInstance().getLogger().log( Level.WARNING, "Failed to enable {0}", entry.getKey() );
              }
-@@ -270,7 +272,7 @@ public class PluginManager
+@@ -292,7 +294,7 @@ public class PluginManager
          }
      }
  
@@ -144,7 +145,7 @@ index c9ac96d6..f2cefd57 100644
      {
          if ( pluginStatuses.containsKey( plugin ) )
          {
-@@ -278,12 +280,13 @@ public class PluginManager
+@@ -300,12 +302,13 @@ public class PluginManager
          }
  
          // combine all dependencies for 'for loop'
@@ -159,7 +160,7 @@ index c9ac96d6..f2cefd57 100644
  
          // try to load dependencies first
          for ( String dependName : dependencies )
-@@ -306,11 +309,15 @@ public class PluginManager
+@@ -328,11 +331,15 @@ public class PluginManager
                  } else
                  {
                      dependStack.push( plugin );
@@ -176,7 +177,7 @@ index c9ac96d6..f2cefd57 100644
              if ( dependStatus == Boolean.FALSE && plugin.getDepends().contains( dependName ) ) // only fail if this wasn't a soft dependency
              {
                  ProxyServer.getInstance().getLogger().log( Level.WARNING, "{0} (required by {1}) is unavailable", new Object[]
-@@ -331,10 +338,11 @@ public class PluginManager
+@@ -353,10 +360,11 @@ public class PluginManager
          {
              try
              {
@@ -190,5 +191,5 @@ index c9ac96d6..f2cefd57 100644
                  Plugin clazz = (Plugin) main.getDeclaredConstructor().newInstance();
  
 -- 
-2.19.0
+2.20.1
 

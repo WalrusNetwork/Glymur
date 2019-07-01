@@ -1,11 +1,11 @@
-From 97125fa084464232e6a2d34ba3b0b270a18e1f14 Mon Sep 17 00:00:00 2001
+From c0ec8ee9b43c92b6884000a010cea87dce7b3a3b Mon Sep 17 00:00:00 2001
 From: Troy Frew <fuzzy_bot@arenaga.me>
 Date: Tue, 15 Nov 2016 08:56:43 -0500
 Subject: [PATCH] POM Changes
 
 
 diff --git a/api/pom.xml b/api/pom.xml
-index 0e46cbbe..3c04cccf 100644
+index b79d7ed6..3da0fcd6 100644
 --- a/api/pom.xml
 +++ b/api/pom.xml
 @@ -5,41 +5,41 @@
@@ -14,14 +14,14 @@ index 0e46cbbe..3c04cccf 100644
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-parent</artifactId>
 +        <artifactId>glymur-parent</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-api</artifactId>
 +    <artifactId>glymur-api</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 -    <name>Waterfall-API</name>
@@ -58,7 +58,7 @@ index 0e46cbbe..3c04cccf 100644
              <scope>compile</scope>
          </dependency>
 diff --git a/bootstrap/pom.xml b/bootstrap/pom.xml
-index dae58ec6..8eddbb3b 100644
+index 487fb3bb..9af607ef 100644
 --- a/bootstrap/pom.xml
 +++ b/bootstrap/pom.xml
 @@ -5,18 +5,18 @@
@@ -67,14 +67,14 @@ index dae58ec6..8eddbb3b 100644
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-parent</artifactId>
 +        <artifactId>glymur-parent</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-bootstrap</artifactId>
 +    <artifactId>glymur-bootstrap</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 -    <name>Waterfall-Bootstrap</name>
@@ -84,7 +84,7 @@ index dae58ec6..8eddbb3b 100644
  
      <properties>
          <maven.deploy.skip>true</maven.deploy.skip>
-@@ -28,7 +28,7 @@
+@@ -28,14 +28,14 @@
      <dependencies>
          <dependency>
              <groupId>io.github.waterfallmc</groupId>
@@ -93,7 +93,6 @@ index dae58ec6..8eddbb3b 100644
              <version>${project.version}</version>
              <scope>compile</scope>
          </dependency>
-@@ -41,7 +41,7 @@
      </dependencies>
  
      <build>
@@ -103,7 +102,7 @@ index dae58ec6..8eddbb3b 100644
              <plugin>
                  <groupId>org.apache.maven.plugins</groupId>
 diff --git a/chat/pom.xml b/chat/pom.xml
-index c9328ac3..ed36c921 100644
+index 7ad05abb..a30dd01e 100644
 --- a/chat/pom.xml
 +++ b/chat/pom.xml
 @@ -5,18 +5,18 @@
@@ -112,14 +111,14 @@ index c9328ac3..ed36c921 100644
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-parent</artifactId>
 +        <artifactId>glymur-parent</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-chat</artifactId>
 +    <artifactId>glymur-chat</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 -    <name>Waterfall-Chat</name>
@@ -130,7 +129,7 @@ index c9328ac3..ed36c921 100644
      <dependencies>
          <dependency>
 diff --git a/config/pom.xml b/config/pom.xml
-index 1bc01b9a..ef012e4c 100644
+index 9d0fe24b..70997125 100644
 --- a/config/pom.xml
 +++ b/config/pom.xml
 @@ -5,18 +5,18 @@
@@ -139,14 +138,14 @@ index 1bc01b9a..ef012e4c 100644
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-parent</artifactId>
 +        <artifactId>glymur-parent</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-config</artifactId>
 +    <artifactId>glymur-config</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 -    <name>Waterfall-Config</name>
@@ -157,7 +156,7 @@ index 1bc01b9a..ef012e4c 100644
      <dependencies>
          <dependency>
 diff --git a/event/pom.xml b/event/pom.xml
-index e778b3d9..7f53d5b2 100644
+index d6efe097..a1f8e678 100644
 --- a/event/pom.xml
 +++ b/event/pom.xml
 @@ -5,16 +5,16 @@
@@ -166,14 +165,14 @@ index e778b3d9..7f53d5b2 100644
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-parent</artifactId>
 +        <artifactId>glymur-parent</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-event</artifactId>
 +    <artifactId>glymur-event</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 -    <name>Waterfall-Event</name>
@@ -182,7 +181,7 @@ index e778b3d9..7f53d5b2 100644
 +    <description>Generic java event dispatching API intended for use with Glymur.</description>
  </project>
 diff --git a/log/pom.xml b/log/pom.xml
-index e24b3e40..83e25b7e 100644
+index fd999b51..af98ea5e 100644
 --- a/log/pom.xml
 +++ b/log/pom.xml
 @@ -5,18 +5,18 @@
@@ -191,14 +190,14 @@ index e24b3e40..83e25b7e 100644
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-parent</artifactId>
 +        <artifactId>glymur-parent</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-log</artifactId>
 +    <artifactId>glymur-log</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 -    <name>Waterfall-Log</name>
@@ -218,7 +217,7 @@ index e24b3e40..83e25b7e 100644
              <scope>compile</scope>
          </dependency>
 diff --git a/log4j/pom.xml b/log4j/pom.xml
-index 33f1b659..dcee212e 100644
+index e03fe0d7..3dfcc98b 100644
 --- a/log4j/pom.xml
 +++ b/log4j/pom.xml
 @@ -4,17 +4,17 @@
@@ -227,14 +226,14 @@ index 33f1b659..dcee212e 100644
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-parent</artifactId>
 +        <artifactId>glymur-parent</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-log4j</artifactId>
 +    <artifactId>glymur-log4j</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 -    <name>Waterfall-Log</name>
@@ -268,7 +267,7 @@ index 33f1b659..dcee212e 100644
      </dependencies>
  </project>
 diff --git a/module/cmd-alert/pom.xml b/module/cmd-alert/pom.xml
-index db149339..d68e9f6b 100644
+index 6f3aa272..645ad2f2 100644
 --- a/module/cmd-alert/pom.xml
 +++ b/module/cmd-alert/pom.xml
 @@ -5,13 +5,13 @@
@@ -277,18 +276,18 @@ index db149339..d68e9f6b 100644
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-module</artifactId>
 +        <artifactId>glymur-module</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-module-cmd-alert</artifactId>
 +    <artifactId>glymur-module-cmd-alert</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 diff --git a/module/cmd-find/pom.xml b/module/cmd-find/pom.xml
-index c8d9826d..cd57a8db 100644
+index 01d95284..ebaf1c9d 100644
 --- a/module/cmd-find/pom.xml
 +++ b/module/cmd-find/pom.xml
 @@ -5,13 +5,13 @@
@@ -297,38 +296,40 @@ index c8d9826d..cd57a8db 100644
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-module</artifactId>
 +        <artifactId>glymur-module</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-module-cmd-find</artifactId>
 +    <artifactId>glymur-module-cmd-find</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 diff --git a/module/cmd-list/pom.xml b/module/cmd-list/pom.xml
-index 461b26ee..7e04b36e 100644
+index bc5dc210..8f1dd72c 100644
 --- a/module/cmd-list/pom.xml
 +++ b/module/cmd-list/pom.xml
-@@ -5,13 +5,13 @@
+@@ -5,14 +5,14 @@
  
      <parent>
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-module</artifactId>
 +        <artifactId>glymur-module</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-module-cmd-list</artifactId>
-+    <artifactId>glymur-module-cmd-list</artifactId>
-     <version>1.13-SNAPSHOT</version>
+-    <version>1.14-SNAPSHOT</version>
++  <artifactId>glymur-module-cmd-list</artifactId>
++  <version>1.14-SNAPSHOT</version>
      <packaging>jar</packaging>
  
+     <name>cmd_list</name>
 diff --git a/module/cmd-send/pom.xml b/module/cmd-send/pom.xml
-index 1b687b3c..cf7a1ab2 100644
+index f6642175..cfa8dda7 100644
 --- a/module/cmd-send/pom.xml
 +++ b/module/cmd-send/pom.xml
 @@ -5,13 +5,13 @@
@@ -337,18 +338,18 @@ index 1b687b3c..cf7a1ab2 100644
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-module</artifactId>
 +        <artifactId>glymur-module</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-module-cmd-send</artifactId>
 +    <artifactId>glymur-module-cmd-send</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 diff --git a/module/cmd-server/pom.xml b/module/cmd-server/pom.xml
-index 9bdc3aba..9b39751f 100644
+index c93ab2c9..7db05b71 100644
 --- a/module/cmd-server/pom.xml
 +++ b/module/cmd-server/pom.xml
 @@ -5,13 +5,13 @@
@@ -357,18 +358,18 @@ index 9bdc3aba..9b39751f 100644
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-module</artifactId>
 +        <artifactId>glymur-module</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-module-cmd-server</artifactId>
 +    <artifactId>glymur-module-cmd-server</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 diff --git a/module/pom.xml b/module/pom.xml
-index 6bed2ea0..eb7850e7 100644
+index aa604f35..1962a046 100644
 --- a/module/pom.xml
 +++ b/module/pom.xml
 @@ -5,18 +5,18 @@
@@ -377,14 +378,14 @@ index 6bed2ea0..eb7850e7 100644
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-parent</artifactId>
 +        <artifactId>glymur-parent</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-module</artifactId>
 +    <artifactId>glymur-module</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>pom</packaging>
  
 -    <name>Waterfall Modules</name>
@@ -404,7 +405,7 @@ index 6bed2ea0..eb7850e7 100644
              <scope>compile</scope>
          </dependency>
 diff --git a/module/reconnect-yaml/pom.xml b/module/reconnect-yaml/pom.xml
-index ca9a7c61..b22878a2 100644
+index e34bac42..d91fcc4b 100644
 --- a/module/reconnect-yaml/pom.xml
 +++ b/module/reconnect-yaml/pom.xml
 @@ -5,13 +5,13 @@
@@ -413,18 +414,18 @@ index ca9a7c61..b22878a2 100644
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-module</artifactId>
 +        <artifactId>glymur-module</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-module-reconnect-yaml</artifactId>
 +    <artifactId>glymur-module-reconnect-yaml</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 diff --git a/native/pom.xml b/native/pom.xml
-index 7073b404..da065531 100644
+index b5aeb99e..c4b403af 100644
 --- a/native/pom.xml
 +++ b/native/pom.xml
 @@ -5,18 +5,18 @@
@@ -433,14 +434,14 @@ index 7073b404..da065531 100644
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-parent</artifactId>
 +        <artifactId>glymur-parent</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-native</artifactId>
 +    <artifactId>glymur-native</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 -    <name>Waterfall-Native</name>
@@ -451,7 +452,7 @@ index 7073b404..da065531 100644
      <dependencies>
          <dependency>
 diff --git a/pom.xml b/pom.xml
-index 5c9fefbe..bd7bebd7 100644
+index eff0bf2e..405330c5 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -5,19 +5,19 @@
@@ -467,7 +468,7 @@ index 5c9fefbe..bd7bebd7 100644
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-parent</artifactId>
 +    <artifactId>glymur-parent</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>pom</packaging>
  
 -    <name>Waterfall-Parent</name>
@@ -503,23 +504,23 @@ index 5c9fefbe..bd7bebd7 100644
  
      <distributionManagement>
 diff --git a/protocol/pom.xml b/protocol/pom.xml
-index a635cb70..2d8276d9 100644
+index 2493fc17..25199775 100644
 --- a/protocol/pom.xml
 +++ b/protocol/pom.xml
-@@ -5,23 +5,23 @@
+@@ -5,18 +5,18 @@
  
      <parent>
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-parent</artifactId>
 +        <artifactId>glymur-parent</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-protocol</artifactId>
 +    <artifactId>glymur-protocol</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 -    <name>Waterfall-Protocol</name>
@@ -527,7 +528,10 @@ index a635cb70..2d8276d9 100644
 +    <name>Glymur-Protocol</name>
 +    <description>Minimal implementation of the Minecraft protocol for use in Glymur</description>
  
-     <dependencies>
+     <!-- We really shouldn't depend on external repositories, but at least this is the Central staging one -->
+     <repositories>
+@@ -42,7 +42,7 @@
+         </dependency>
          <dependency>
              <groupId>io.github.waterfallmc</groupId>
 -            <artifactId>waterfall-chat</artifactId>
@@ -536,7 +540,7 @@ index a635cb70..2d8276d9 100644
              <scope>compile</scope>
          </dependency>
 diff --git a/proxy/pom.xml b/proxy/pom.xml
-index dff5bc74..c3a48c62 100644
+index f15927ec..46dc6051 100644
 --- a/proxy/pom.xml
 +++ b/proxy/pom.xml
 @@ -5,17 +5,17 @@
@@ -545,14 +549,14 @@ index dff5bc74..c3a48c62 100644
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-parent</artifactId>
 +        <artifactId>glymur-parent</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-proxy</artifactId>
 +    <artifactId>glymur-proxy</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 -    <name>Waterfall-Proxy</name>
@@ -615,36 +619,43 @@ index dff5bc74..c3a48c62 100644
              <scope>compile</scope>
          </dependency>
 diff --git a/proxy/src/main/java/net/md_5/bungee/module/JenkinsModuleSource.java b/proxy/src/main/java/net/md_5/bungee/module/JenkinsModuleSource.java
-index e1cf0010..3603a69c 100644
+index 9b20d0df..eff81b30 100644
 --- a/proxy/src/main/java/net/md_5/bungee/module/JenkinsModuleSource.java
 +++ b/proxy/src/main/java/net/md_5/bungee/module/JenkinsModuleSource.java
-@@ -18,7 +18,7 @@ public class JenkinsModuleSource implements ModuleSource
+@@ -18,7 +18,11 @@ public class JenkinsModuleSource implements ModuleSource
          System.out.println( "Attempting to Jenkins download module " + module.getName() + " v" + version.getBuild() );
          try
          {
--            URL website = new URL( "https://ci.destroystokyo.com/job/Waterfall/" + version.getBuild() + "/artifact/Waterfall-Proxy/module/" + module.getName().replace( '_', '-' ) + "/target/" + module.getName() + ".jar" );
++<<<<<<< HEAD
+             URL website = new URL( "https://papermc.io/ci/job/Waterfall/" + version.getBuild() + "/artifact/Waterfall-Proxy/module/" + module.getName().replace( '_', '-' ) + "/target/" + module.getName() + ".jar" );
++=======
 +            URL website = new URL( "https://ci.destroystokyo.com/job/Glymur/" + version.getBuild() + "/artifact/Glymur-Proxy/module/" + module.getName().replace( '_', '-' ) + "/target/" + module.getName() + ".jar" );
++>>>>>>> POM Changes
              URLConnection con = website.openConnection();
              // 15 second timeout at various stages
              con.setConnectTimeout( 15000 );
 diff --git a/query/pom.xml b/query/pom.xml
-index 4ae682ee..a6f78070 100644
+index 1fd54029..44107658 100644
 --- a/query/pom.xml
 +++ b/query/pom.xml
-@@ -5,18 +5,18 @@
+@@ -1,22 +1,21 @@
+-
+ <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
  
      <parent>
          <groupId>io.github.waterfallmc</groupId>
 -        <artifactId>waterfall-parent</artifactId>
 +        <artifactId>glymur-parent</artifactId>
-         <version>1.13-SNAPSHOT</version>
+         <version>1.14-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
      <groupId>io.github.waterfallmc</groupId>
 -    <artifactId>waterfall-query</artifactId>
 +    <artifactId>glymur-query</artifactId>
-     <version>1.13-SNAPSHOT</version>
+     <version>1.14-SNAPSHOT</version>
      <packaging>jar</packaging>
  
 -    <name>Waterfall-Query</name>
@@ -654,7 +665,7 @@ index 4ae682ee..a6f78070 100644
  
      <dependencies>
          <dependency>
-@@ -27,7 +27,7 @@
+@@ -27,7 +26,7 @@
          </dependency>
          <dependency>
              <groupId>io.github.waterfallmc</groupId>
@@ -664,5 +675,5 @@ index 4ae682ee..a6f78070 100644
              <scope>compile</scope>
          </dependency>
 -- 
-2.19.0
+2.20.1
 

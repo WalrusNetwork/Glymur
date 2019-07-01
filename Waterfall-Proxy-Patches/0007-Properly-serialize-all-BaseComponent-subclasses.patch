@@ -1,23 +1,27 @@
-From 18289b23f68e44306dbf9b5ec2d4eb6089ec6af7 Mon Sep 17 00:00:00 2001
+From 57bdc2890f32f7723ed4f637857f9d11aa7913ad Mon Sep 17 00:00:00 2001
 From: Austin Mayes <austin@avicus.net>
 Date: Mon, 31 Dec 2018 18:00:34 -0600
 Subject: [PATCH] Properly serialize all BaseComponent subclasses
 
 
 diff --git a/chat/src/main/java/net/md_5/bungee/chat/ComponentSerializer.java b/chat/src/main/java/net/md_5/bungee/chat/ComponentSerializer.java
-index 0b7cf3b4..a9c4228e 100644
+index 2a780694..0d98ec46 100644
 --- a/chat/src/main/java/net/md_5/bungee/chat/ComponentSerializer.java
 +++ b/chat/src/main/java/net/md_5/bungee/chat/ComponentSerializer.java
-@@ -23,12 +23,12 @@ public class ComponentSerializer implements JsonDeserializer<BaseComponent>
+@@ -20,14 +20,14 @@ import net.md_5.bungee.api.chat.TranslatableComponent;
+ public class ComponentSerializer implements JsonDeserializer<BaseComponent>
+ {
  
-     private final static JsonParser JSON_PARSER = new JsonParser();
-     private final static Gson gson = new GsonBuilder().
+-    private static final JsonParser JSON_PARSER = new JsonParser();
+-    private static final Gson gson = new GsonBuilder().
 -            registerTypeAdapter( BaseComponent.class, new ComponentSerializer() ).
 -            registerTypeAdapter( TextComponent.class, new TextComponentSerializer() ).
 -            registerTypeAdapter( TranslatableComponent.class, new TranslatableComponentSerializer() ).
 -            registerTypeAdapter( KeybindComponent.class, new KeybindComponentSerializer() ).
 -            registerTypeAdapter( ScoreComponent.class, new ScoreComponentSerializer() ).
 -            registerTypeAdapter( SelectorComponent.class, new SelectorComponentSerializer() ).
++    private final static JsonParser JSON_PARSER = new JsonParser();
++    private final static Gson gson = new GsonBuilder().
 +            registerTypeHierarchyAdapter( BaseComponent.class, new ComponentSerializer() ).
 +            registerTypeHierarchyAdapter( TextComponent.class, new TextComponentSerializer() ).
 +            registerTypeHierarchyAdapter( TranslatableComponent.class, new TranslatableComponentSerializer() ).
@@ -26,7 +30,7 @@ index 0b7cf3b4..a9c4228e 100644
 +            registerTypeHierarchyAdapter( SelectorComponent.class, new SelectorComponentSerializer() ).
              create();
  
-     public final static ThreadLocal<HashSet<BaseComponent>> serializedComponents = new ThreadLocal<HashSet<BaseComponent>>();
+     public static final ThreadLocal<Set<BaseComponent>> serializedComponents = new ThreadLocal<Set<BaseComponent>>();
 -- 
-2.19.0
+2.20.1
 
