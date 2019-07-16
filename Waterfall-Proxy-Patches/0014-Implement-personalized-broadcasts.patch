@@ -1,0 +1,78 @@
+From d2f7d4e4477d6153b6597a1fc796792312401670 Mon Sep 17 00:00:00 2001
+From: Austin Mayes <austin@avicus.net>
+Date: Tue, 16 Jul 2019 16:46:38 -0500
+Subject: [PATCH] Implement personalized broadcasts
+
+
+diff --git a/api/src/main/java/net/md_5/bungee/api/ProxyServer.java b/api/src/main/java/net/md_5/bungee/api/ProxyServer.java
+index d44ac67e..e0d2d96d 100644
+--- a/api/src/main/java/net/md_5/bungee/api/ProxyServer.java
++++ b/api/src/main/java/net/md_5/bungee/api/ProxyServer.java
+@@ -15,6 +15,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
+ import net.md_5.bungee.api.plugin.Plugin;
+ import net.md_5.bungee.api.plugin.PluginManager;
+ import net.md_5.bungee.api.scheduler.TaskScheduler;
++import network.stratus.common.text.PersonalizedComponent;
+ 
+ public abstract class ProxyServer
+ {
+@@ -277,6 +278,21 @@ public abstract class ProxyServer
+      */
+     public abstract void broadcast(BaseComponent message);
+ 
++    /**
++     * Broadcasts a translatable component to all {@link ProxiedPlayer}s using their {@link CommandSender#getLocale() locale}.
++     *
++     * @param translatable the translatable component
++     */
++    public abstract void broadcast(PersonalizedComponent translatable);
++
++    /**
++     * Broadcasts a translatable component to all {@link ProxiedPlayer}s with the specified permission using their {@link CommandSender#getLocale() locale}.
++     *
++     * @param translatable the translatable component
++     * @param permission the player needs in order to see the message
++     */
++    public abstract void broadcast(PersonalizedComponent translatable, String permission);
++
+     /**
+      * Gets the commands which are disabled and will not be run on this proxy.
+      *
+diff --git a/proxy/src/main/java/net/md_5/bungee/BungeeCord.java b/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
+index f6580641..9fb0f539 100644
+--- a/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
++++ b/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
+@@ -89,6 +89,7 @@ import net.md_5.bungee.protocol.packet.PluginMessage;
+ import net.md_5.bungee.query.RemoteQuery;
+ import net.md_5.bungee.scheduler.BungeeScheduler;
+ import net.md_5.bungee.util.CaseInsensitiveMap;
++import network.stratus.common.text.PersonalizedComponent;
+ 
+ /**
+  * Main BungeeCord proxy class.
+@@ -694,6 +695,22 @@ public class BungeeCord extends ProxyServer
+         broadcast( new Chat( ComponentSerializer.toString( message ) ) );
+     }
+ 
++    @Override
++    public void broadcast(PersonalizedComponent translatable) {
++        getConsole().sendMessage( translatable );
++        for (ProxiedPlayer player : this.getPlayers()) {
++            player.sendMessage(translatable);
++        }
++    }
++
++    @Override
++    public void broadcast(PersonalizedComponent translatable, String permission) {
++        getConsole().sendMessage( translatable );
++        for (ProxiedPlayer player : this.getPlayers()) {
++            if (player.hasPermission(permission)) player.sendMessage(translatable);
++        }
++    }
++
+     public void addConnection(UserConnection con)
+     {
+         connectionLock.writeLock().lock();
+-- 
+2.20.1
+

@@ -1,0 +1,248 @@
+From de21fbc3e5652aeb6fb5b358cbe9cee9ca6633d9 Mon Sep 17 00:00:00 2001
+From: Austin Mayes <austin@avicus.net>
+Date: Tue, 16 Jul 2019 16:03:55 -0500
+Subject: [PATCH] Implement common
+
+
+diff --git a/api/src/main/java/net/md_5/bungee/api/CommandSender.java b/api/src/main/java/net/md_5/bungee/api/CommandSender.java
+index d5888311..ac441942 100644
+--- a/api/src/main/java/net/md_5/bungee/api/CommandSender.java
++++ b/api/src/main/java/net/md_5/bungee/api/CommandSender.java
+@@ -3,7 +3,7 @@ package net.md_5.bungee.api;
+ import java.util.Collection;
+ import net.md_5.bungee.api.chat.BaseComponent;
+ 
+-public interface CommandSender
++public interface CommandSender extends network.stratus.common.CommandSender
+ {
+ 
+     /**
+diff --git a/pom.xml b/pom.xml
+index 405330c5..7f25e23a 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -78,17 +78,6 @@
+         <url>https://papermc.io/ci/job/Glymur/</url>
+     </ciManagement>
+ 
+-    <distributionManagement>
+-        <repository>
+-            <id>papermc-releases</id>
+-            <url>https://papermc.io/repo/repository/maven-releases/</url>
+-        </repository>
+-        <snapshotRepository>
+-            <id>papermc-snapshots</id>
+-            <url>https://papermc.io/repo/repository/maven-snapshots/</url>
+-        </snapshotRepository>
+-    </distributionManagement>
+-
+     <properties>
+         <build.number>unknown</build.number>
+         <netty.version>4.1.34.Final</netty.version>
+@@ -123,6 +112,11 @@
+             <version>1.18.4</version>
+             <scope>provided</scope>
+         </dependency>
++        <dependency>
++            <groupId>network.stratus</groupId>
++            <artifactId>common</artifactId>
++            <version>1.0-SNAPSHOT</version>
++        </dependency>
+     </dependencies>
+ 
+     <build>
+diff --git a/proxy/src/main/java/net/md_5/bungee/UserConnection.java b/proxy/src/main/java/net/md_5/bungee/UserConnection.java
+index acb5988c..b91f226d 100644
+--- a/proxy/src/main/java/net/md_5/bungee/UserConnection.java
++++ b/proxy/src/main/java/net/md_5/bungee/UserConnection.java
+@@ -12,15 +12,7 @@ import io.netty.channel.ChannelInitializer;
+ import io.netty.channel.ChannelOption;
+ import io.netty.util.internal.PlatformDependent;
+ import java.net.InetSocketAddress;
+-import java.util.Collection;
+-import java.util.Collections;
+-import java.util.HashSet;
+-import java.util.LinkedList;
+-import java.util.Locale;
+-import java.util.Map;
+-import java.util.Objects;
+-import java.util.Queue;
+-import java.util.UUID;
++import java.util.*;
+ import java.util.logging.Level;
+ import lombok.Getter;
+ import lombok.NonNull;
+@@ -64,6 +56,7 @@ import net.md_5.bungee.tab.ServerUnique;
+ import net.md_5.bungee.tab.TabList;
+ import net.md_5.bungee.util.CaseInsensitiveSet;
+ import net.md_5.bungee.util.ChatComponentTransformer;
++import network.stratus.common.CommandSender;
+ 
+ @RequiredArgsConstructor
+ public final class UserConnection implements ProxiedPlayer
+@@ -761,4 +754,85 @@ public final class UserConnection implements ProxiedPlayer
+         return disableEntityMetadaRewrite;
+     }
+     // Waterfall end
++
++    private final Map<CommandSender, String> fakeNames = new WeakHashMap<CommandSender, String>();
++    private final Map<CommandSender, String> fakeDisplayNames = new WeakHashMap<CommandSender, String>();
++
++    @Override
++    public String getName(CommandSender viewer) {
++        String name = this.getFakeName(viewer);
++        if(name == null) {
++            name = this.getName();
++        }
++        return name;
++    }
++
++    @Override
++    public void setFakeName(CommandSender viewer, String name) {
++        if(name != null && name.length() > 16) {
++            throw new IllegalArgumentException("Fake player names are limited to 16 characters in length");
++        }
++        if(name == null) {
++            this.fakeNames.remove(viewer);
++        } else {
++            this.fakeNames.put(viewer, name);
++        }
++    }
++
++    @Override
++    public String getFakeName(CommandSender viewer) {
++        return viewer == null ? null : this.fakeNames.get(viewer);
++    }
++
++    @Override
++    public boolean hasFakeName(CommandSender viewer) {
++        return viewer != null && this.fakeNames.containsKey(viewer);
++    }
++
++    @Override
++    public void clearFakeNames() {
++        this.fakeNames.clear();
++    }
++
++    @Override
++    public void setFakeDisplayName(CommandSender viewer, String name) {
++        if(name == null)  {
++            this.fakeDisplayNames.remove(viewer);
++        } else {
++            this.fakeDisplayNames.put(viewer, name);
++        }
++    }
++
++    @Override
++    public String getFakeDisplayName(CommandSender viewer) {
++        return viewer == null ? null : this.fakeDisplayNames.get(viewer);
++    }
++
++    @Override
++    public boolean hasFakeDisplayName(CommandSender viewer) {
++        return this.fakeDisplayNames.containsKey(viewer);
++    }
++
++    @Override
++    public void clearFakeDisplayNames() {
++        this.fakeDisplayNames.clear();
++    }
++
++    @Override
++    public String getPlayerListName(CommandSender viewer) {
++        String name = this.getFakeName(viewer);
++        if(name == null) {
++            name = this.getName();
++        }
++        return name;
++    }
++
++    @Override
++    public String getDisplayName(CommandSender viewer) {
++        String name = this.getFakeDisplayName(viewer);
++        if(name == null) {
++            name = this.getDisplayName();
++        }
++        return name;
++    }
+ }
+diff --git a/proxy/src/main/java/net/md_5/bungee/command/ConsoleCommandSender.java b/proxy/src/main/java/net/md_5/bungee/command/ConsoleCommandSender.java
+index 33d7e5bb..38784792 100644
+--- a/proxy/src/main/java/net/md_5/bungee/command/ConsoleCommandSender.java
++++ b/proxy/src/main/java/net/md_5/bungee/command/ConsoleCommandSender.java
+@@ -2,6 +2,7 @@ package net.md_5.bungee.command;
+ 
+ import java.util.Collection;
+ import java.util.Collections;
++import java.util.Locale;
+ import lombok.AccessLevel;
+ import lombok.Getter;
+ import lombok.NoArgsConstructor;
+@@ -87,4 +88,64 @@ public final class ConsoleCommandSender implements CommandSender
+     {
+         return Collections.emptySet();
+     }
++
++    @Override
++    public Locale getLocale() {
++        return Locale.getDefault();
++    }
++
++    @Override
++    public String getName(network.stratus.common.CommandSender viewer) {
++        return getName();
++    }
++
++    @Override
++    public void setFakeName(network.stratus.common.CommandSender viewer, String name) {
++
++    }
++
++    @Override
++    public String getFakeName(network.stratus.common.CommandSender viewer) {
++        return getName();
++    }
++
++    @Override
++    public boolean hasFakeName(network.stratus.common.CommandSender viewer) {
++        return false;
++    }
++
++    @Override
++    public void clearFakeNames() {
++
++    }
++
++    @Override
++    public void setFakeDisplayName(network.stratus.common.CommandSender viewer, String name) {
++
++    }
++
++    @Override
++    public String getFakeDisplayName(network.stratus.common.CommandSender viewer) {
++        return getName();
++    }
++
++    @Override
++    public boolean hasFakeDisplayName(network.stratus.common.CommandSender viewer) {
++        return false;
++    }
++
++    @Override
++    public void clearFakeDisplayNames() {
++
++    }
++
++    @Override
++    public String getPlayerListName(network.stratus.common.CommandSender viewer) {
++        return getName();
++    }
++
++    @Override
++    public String getDisplayName(network.stratus.common.CommandSender viewer) {
++        return getName();
++    }
+ }
+-- 
+2.20.1
+
