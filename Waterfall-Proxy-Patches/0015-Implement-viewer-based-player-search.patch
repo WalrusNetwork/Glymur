@@ -1,0 +1,63 @@
+From 6fe4706237559f5695f0a1b7915feaf3b66ccac7 Mon Sep 17 00:00:00 2001
+From: Austin Mayes <austin@avicus.net>
+Date: Wed, 17 Jul 2019 13:51:18 -0500
+Subject: [PATCH] Implement viewer-based player search
+
+
+diff --git a/api/src/main/java/net/md_5/bungee/api/ProxyServer.java b/api/src/main/java/net/md_5/bungee/api/ProxyServer.java
+index e0d2d96d..6e7689e1 100644
+--- a/api/src/main/java/net/md_5/bungee/api/ProxyServer.java
++++ b/api/src/main/java/net/md_5/bungee/api/ProxyServer.java
+@@ -75,6 +75,15 @@ public abstract class ProxyServer
+      */
+     public abstract Collection<ProxiedPlayer> getPlayers();
+ 
++    /**
++     * Gets a connected player via their fake username based on the viewer.
++     *
++     * @param name of the player
++     * @param viewer who is performing the search
++     * @return their player instance
++     */
++    public abstract ProxiedPlayer getPlayer(String name, CommandSender viewer);
++
+     /**
+      * Gets a connected player via their unique username.
+      *
+diff --git a/proxy/src/main/java/net/md_5/bungee/BungeeCord.java b/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
+index 9fb0f539..91d7f79b 100644
+--- a/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
++++ b/proxy/src/main/java/net/md_5/bungee/BungeeCord.java
+@@ -575,6 +575,29 @@ public class BungeeCord extends ProxyServer
+         }
+     }
+ 
++    @Override
++    public ProxiedPlayer getPlayer(String name, CommandSender viewer) {
++        ProxiedPlayer found = getPlayer(name);
++        // Try for an exact match first.
++        if (found != null) {
++            return found;
++        }
++
++        String lowerName = name.toLowerCase();
++        int delta = Integer.MAX_VALUE;
++        for (ProxiedPlayer player : getPlayers()) {
++            if (player.getName(viewer).toLowerCase().startsWith(lowerName)) {
++                int curDelta = player.getName(viewer).length() - lowerName.length();
++                if (curDelta < delta) {
++                    found = player;
++                    delta = curDelta;
++                }
++                if (curDelta == 0) break;
++            }
++        }
++        return found;
++    }
++
+     public UserConnection getPlayerByOfflineUUID(UUID name)
+     {
+         connectionLock.readLock().lock();
+-- 
+2.20.1
+

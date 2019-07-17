@@ -13,7 +13,7 @@ index d5888311..ac441942 100644
  import net.md_5.bungee.api.chat.BaseComponent;
  
 -public interface CommandSender
-+public interface CommandSender extends network.stratus.common.CommandSender
++public interface CommandSender extends network.walrus.common.CommandSender
  {
  
      /**
@@ -44,7 +44,7 @@ index 405330c5..7f25e23a 100644
              <scope>provided</scope>
          </dependency>
 +        <dependency>
-+            <groupId>network.stratus</groupId>
++            <groupId>network.walrus</groupId>
 +            <artifactId>common</artifactId>
 +            <version>1.0-SNAPSHOT</version>
 +        </dependency>
@@ -76,7 +76,7 @@ index acb5988c..b91f226d 100644
  import net.md_5.bungee.tab.TabList;
  import net.md_5.bungee.util.CaseInsensitiveSet;
  import net.md_5.bungee.util.ChatComponentTransformer;
-+import network.stratus.common.CommandSender;
++import network.walrus.common.CommandSender;
  
  @RequiredArgsConstructor
  public final class UserConnection implements ProxiedPlayer
@@ -189,22 +189,22 @@ index 33d7e5bb..38784792 100644
 +    }
 +
 +    @Override
-+    public String getName(network.stratus.common.CommandSender viewer) {
++    public String getName(network.walrus.common.CommandSender viewer) {
 +        return getName();
 +    }
 +
 +    @Override
-+    public void setFakeName(network.stratus.common.CommandSender viewer, String name) {
++    public void setFakeName(network.walrus.common.CommandSender viewer, String name) {
 +
 +    }
 +
 +    @Override
-+    public String getFakeName(network.stratus.common.CommandSender viewer) {
++    public String getFakeName(network.walrus.common.CommandSender viewer) {
 +        return getName();
 +    }
 +
 +    @Override
-+    public boolean hasFakeName(network.stratus.common.CommandSender viewer) {
++    public boolean hasFakeName(network.walrus.common.CommandSender viewer) {
 +        return false;
 +    }
 +
@@ -214,17 +214,17 @@ index 33d7e5bb..38784792 100644
 +    }
 +
 +    @Override
-+    public void setFakeDisplayName(network.stratus.common.CommandSender viewer, String name) {
++    public void setFakeDisplayName(network.walrus.common.CommandSender viewer, String name) {
 +
 +    }
 +
 +    @Override
-+    public String getFakeDisplayName(network.stratus.common.CommandSender viewer) {
++    public String getFakeDisplayName(network.walrus.common.CommandSender viewer) {
 +        return getName();
 +    }
 +
 +    @Override
-+    public boolean hasFakeDisplayName(network.stratus.common.CommandSender viewer) {
++    public boolean hasFakeDisplayName(network.walrus.common.CommandSender viewer) {
 +        return false;
 +    }
 +
@@ -234,12 +234,12 @@ index 33d7e5bb..38784792 100644
 +    }
 +
 +    @Override
-+    public String getPlayerListName(network.stratus.common.CommandSender viewer) {
++    public String getPlayerListName(network.walrus.common.CommandSender viewer) {
 +        return getName();
 +    }
 +
 +    @Override
-+    public String getDisplayName(network.stratus.common.CommandSender viewer) {
++    public String getDisplayName(network.walrus.common.CommandSender viewer) {
 +        return getName();
 +    }
  }

@@ -12,7 +12,7 @@ index d44ac67e..e0d2d96d 100644
  import net.md_5.bungee.api.plugin.Plugin;
  import net.md_5.bungee.api.plugin.PluginManager;
  import net.md_5.bungee.api.scheduler.TaskScheduler;
-+import network.stratus.common.text.PersonalizedComponent;
++import network.walrus.common.text.PersonalizedComponent;
  
  public abstract class ProxyServer
  {
@@ -46,7 +46,7 @@ index f6580641..9fb0f539 100644
  import net.md_5.bungee.query.RemoteQuery;
  import net.md_5.bungee.scheduler.BungeeScheduler;
  import net.md_5.bungee.util.CaseInsensitiveMap;
-+import network.stratus.common.text.PersonalizedComponent;
++import network.walrus.common.text.PersonalizedComponent;
  
  /**
   * Main BungeeCord proxy class.
