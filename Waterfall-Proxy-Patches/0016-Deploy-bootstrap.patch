@@ -1,0 +1,21 @@
+From 8dae653cabf7368bc7ae7aa66f6e2ca04027ed31 Mon Sep 17 00:00:00 2001
+From: Austin Mayes <austin@avicus.net>
+Date: Fri, 4 Oct 2019 19:48:22 -0500
+Subject: [PATCH] Deploy bootstrap
+
+
+diff --git a/bootstrap/pom.xml b/bootstrap/pom.xml
+index 9af607ef..a166ce37 100644
+--- a/bootstrap/pom.xml
++++ b/bootstrap/pom.xml
+@@ -19,7 +19,6 @@
+     <description>Java 1.6 loader for Glymur</description>
+ 
+     <properties>
+-        <maven.deploy.skip>true</maven.deploy.skip>
+         <maven.compiler.source>1.6</maven.compiler.source>
+         <maven.compiler.target>1.6</maven.compiler.target>
+         <maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
+-- 
+2.23.0
+

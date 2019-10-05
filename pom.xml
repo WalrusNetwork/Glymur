@@ -17,6 +17,13 @@
 
     <build>
         <defaultGoal>clean install</defaultGoal>
+        <extensions>
+            <extension>
+                <groupId>com.gkatzioura.maven.cloud</groupId>
+                <artifactId>google-storage-wagon</artifactId>
+                <version>1.0</version>
+            </extension>
+        </extensions>
     </build>
 
     <repositories>
@@ -40,14 +47,4 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <build>
-        <extensions>
-            <extension>
-                <groupId>com.gkatzioura.maven.cloud</groupId>
-                <artifactId>google-storage-wagon</artifactId>
-                <version>1.0</version>
-            </extension>
-        </extensions>
-    </build>
 </project>
